@@ -1,0 +1,16 @@
+{
+  "name": "mandarin-journal",
+  "type": "module",
+  "scripts": {
+    "test": "node --experimental-vm-modules node_modules/.bin/jest",
+    "build-hanzi": "node scripts/build-hanzidb.js"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "fake-indexeddb": "^4.0.2"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "transform": {}
+  }
+}
