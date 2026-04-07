@@ -2,7 +2,7 @@
   "name": "mandarin-journal",
   "type": "module",
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/.bin/jest",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "build-hanzi": "node scripts/build-hanzidb.js"
   },
   "devDependencies": {
