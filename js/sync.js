@@ -18,6 +18,7 @@ async function flushQueue() {
     try {
       const resp = await fetch(GAS_URL, {
         method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify({ action: 'upsertEntry', entry }),
       });
       const result = await resp.json();
