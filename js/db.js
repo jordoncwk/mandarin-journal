@@ -1,5 +1,5 @@
 const DB_NAME = 'mandarin-journal';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 let _db = null;
 
@@ -15,6 +15,13 @@ function openDB() {
       }
       if (!db.objectStoreNames.contains('syncQueue')) {
         db.createObjectStore('syncQueue', { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains('englishEntries')) {
+        const store = db.createObjectStore('englishEntries', { keyPath: 'id' });
+        store.createIndex('createdAt', 'createdAt');
+      }
+      if (!db.objectStoreNames.contains('englishSyncQueue')) {
+        db.createObjectStore('englishSyncQueue', { keyPath: 'id' });
       }
     };
     req.onsuccess = () => { _db = req.result; resolve(_db); };
@@ -73,6 +80,44 @@ export function removeFromSyncQueue(id) {
 
 export function queueDeletion(id) {
   return tx('syncQueue', 'readwrite', store =>
+    store.put({ id, _deleted: true, updatedAt: new Date().toISOString() })
+  );
+}
+
+// ── English Journal ──
+
+export function saveEnglishEntry(entry) {
+  return tx('englishEntries', 'readwrite', store => store.put(entry));
+}
+
+export function getEnglishEntry(id) {
+  return tx('englishEntries', 'readonly', store => store.get(id));
+}
+
+export function deleteEnglishEntry(id) {
+  return tx('englishEntries', 'readwrite', store => store.delete(id));
+}
+
+export function listEnglishEntries() {
+  return getAll('englishEntries').then(rows =>
+    rows.sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+  );
+}
+
+export function addToEnglishSyncQueue(entry) {
+  return tx('englishSyncQueue', 'readwrite', store => store.put(entry));
+}
+
+export function getEnglishSyncQueue() {
+  return getAll('englishSyncQueue');
+}
+
+export function removeFromEnglishSyncQueue(id) {
+  return tx('englishSyncQueue', 'readwrite', store => store.delete(id));
+}
+
+export function queueEnglishDeletion(id) {
+  return tx('englishSyncQueue', 'readwrite', store =>
     store.put({ id, _deleted: true, updatedAt: new Date().toISOString() })
   );
 }
