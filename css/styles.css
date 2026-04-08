@@ -85,6 +85,98 @@ body {
   transition: background 0.15s;
 }
 .entry-card:active { background: var(--surface2); }
+
+/* ── Swipe to delete ── */
+.card-swipe-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+.card-swipe-wrapper .entry-card {
+  margin-bottom: 0;
+  border-radius: 12px;
+  position: relative;
+  z-index: 1;
+  transition: transform 0.2s ease;
+  will-change: transform;
+}
+.swipe-delete-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  background: var(--danger);
+  color: #fff;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 0 12px 12px 0;
+  z-index: 0;
+}
+
+/* ── Multi-select ── */
+.card-swipe-wrapper.selected .entry-card {
+  outline: 2px solid var(--accent);
+}
+.card-checkbox {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  background: var(--surface);
+  z-index: 2;
+  pointer-events: none;
+  display: none;
+}
+.select-mode .card-checkbox { display: block; }
+.card-swipe-wrapper.selected .card-checkbox {
+  background: var(--accent);
+}
+.card-swipe-wrapper.selected .card-checkbox::after {
+  content: '✓';
+  color: #000;
+  font-size: 0.75rem;
+  font-weight: 700;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.multi-delete-bar {
+  position: fixed;
+  bottom: calc(90px + env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--danger);
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  padding: 12px 32px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  z-index: 100;
+  box-shadow: 0 4px 16px rgba(207,102,121,0.5);
+  display: none;
+}
+.select-mode-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: var(--bg);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid var(--surface2);
+}
+
 .entry-characters { font-size: 2rem; margin-bottom: 2px; }
 .entry-pinyin { color: var(--accent); font-size: 0.9rem; margin-bottom: 2px; }
 .entry-english { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 6px; }
