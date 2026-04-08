@@ -5,7 +5,8 @@ const IDS_OPS = new Set(['⿰','⿱','⿲','⿳','⿴','⿵','⿶','⿷','⿸','
 
 function isCJK(char) {
   const cp = char.codePointAt(0);
-  return (cp >= 0x4E00 && cp <= 0x9FFF) ||   // CJK Unified
+  return (cp >= 0x2E80 && cp <= 0x2EFF) ||   // CJK Radicals Supplement
+         (cp >= 0x4E00 && cp <= 0x9FFF) ||   // CJK Unified
          (cp >= 0x3400 && cp <= 0x4DBF) ||   // CJK Extension A
          (cp >= 0x20000 && cp <= 0x2A6DF);   // CJK Extension B
 }
