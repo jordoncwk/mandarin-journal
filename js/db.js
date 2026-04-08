@@ -70,3 +70,9 @@ export function getSyncQueue() {
 export function removeFromSyncQueue(id) {
   return tx('syncQueue', 'readwrite', store => store.delete(id));
 }
+
+export function queueDeletion(id) {
+  return tx('syncQueue', 'readwrite', store =>
+    store.put({ id, _deleted: true, updatedAt: new Date().toISOString() })
+  );
+}
