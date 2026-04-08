@@ -75,7 +75,7 @@ body {
 }
 .chip.active { background: var(--accent); color: #000; font-weight: 600; }
 
-.entry-list { flex: 1; padding: 0 16px; }
+.entry-list { flex: 1; padding: 0 16px calc(120px + env(safe-area-inset-bottom)); overflow-y: auto; }
 .entry-card {
   background: var(--surface);
   border-radius: 12px;

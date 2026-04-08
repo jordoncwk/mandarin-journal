@@ -146,7 +146,6 @@ export async function renderJournal(container) {
                   <button class="swipe-delete-btn">Delete</button>
                 </div>
               `).join('')}
-          <div style="height:calc(90px + env(safe-area-inset-bottom))"></div>
         </div>
         <button class="multi-delete-bar" style="display:none">Delete (0)</button>
         <button class="fab" id="add-btn">+</button>
