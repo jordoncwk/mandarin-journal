@@ -24,6 +24,7 @@ function escHtml(str) {
 export async function renderForm(container, params) {
   const editId = params.get('id');
   const existing = editId ? await getEntry(editId) : null;
+  if (editId && !existing) { navigate('#journal'); return; }
 
   let clipboardChars = '';
   if (!editId && navigator.clipboard) {
