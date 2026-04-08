@@ -16,10 +16,11 @@ async function flushQueue() {
   const queue = await getSyncQueue();
   for (const entry of queue) {
     try {
+      const action = entry._deleted ? 'deleteEntry' : 'upsertEntry';
       const resp = await fetch(GAS_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({ action: 'upsertEntry', entry }),
+        body: JSON.stringify({ action, entry }),
       });
       const result = await resp.json();
       if (result.ok) await removeFromSyncQueue(entry.id);
@@ -39,6 +40,7 @@ async function pullFromSheets() {
     const localMap = Object.fromEntries(local.map(e => [e.id, e]));
     let changed = false;
     for (const entry of remote) {
+      if (entry._deleted) continue;
       const localEntry = localMap[entry.id];
       if (!localEntry || entry.updatedAt > localEntry.updatedAt) {
         await saveEntry(entry);
