@@ -5,6 +5,10 @@ function doPost(e) {
       Entries.upsert(data.entry);
       return json({ ok: true });
     }
+    if (data.action === 'deleteEntry') {
+      Entries.remove(data.entry.id);
+      return json({ ok: true });
+    }
     return json({ ok: false, error: 'Unknown action' });
   } catch (err) {
     return json({ ok: false, error: err.message });

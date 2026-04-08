@@ -45,4 +45,14 @@ const Entries = {
       sh.getRange(rowIndex + 2, 1, 1, COLS.length).setValues([rowData]);
     }
   },
+
+  remove(id) {
+    const sh = this.sheet();
+    const allValues = sh.getDataRange().getValues();
+    const ids = allValues.slice(1).map(r => r[0]);
+    const rowIndex = ids.indexOf(id);
+    if (rowIndex !== -1) {
+      sh.deleteRow(rowIndex + 2);
+    }
+  },
 };
