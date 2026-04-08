@@ -98,6 +98,24 @@ export async function renderForm(container, params) {
     pinyinInput.setSelectionRange(pos, pos);
   });
 
+  // Auto-fill pinyin from characters
+  let pinyinMap = null;
+  async function getPinyinMap() {
+    if (!pinyinMap) {
+      const resp = await fetch('./data/pinyinmap.json');
+      pinyinMap = await resp.json();
+    }
+    return pinyinMap;
+  }
+
+  document.getElementById('characters').addEventListener('input', async () => {
+    const chars = document.getElementById('characters').value.trim();
+    if (!chars) return;
+    const map = await getPinyinMap();
+    const pinyin = [...chars].map(c => map[c] || c).join(' ');
+    pinyinInput.value = pinyin;
+  });
+
   // Tag add
   document.getElementById('add-tag').addEventListener('click', () => {
     const input = document.getElementById('tag-input');

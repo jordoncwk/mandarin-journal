@@ -1,4 +1,4 @@
-const CACHE = 'mandarin-journal-v7';
+const CACHE = 'mandarin-journal-v8';
 const BASE = '/mandarin-journal';
 
 const SHELL = [
@@ -20,6 +20,7 @@ const SHELL = [
   BASE + '/js/detail.js',
   BASE + '/js/flashcard.js',
   BASE + '/data/hanzidb.json',
+  BASE + '/data/pinyinmap.json',
   BASE + '/icons/icon-192.png',
   BASE + '/icons/icon-512.png',
 ];
