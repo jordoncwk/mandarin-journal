@@ -1,4 +1,4 @@
-const CACHE = 'mandarin-journal-v8';
+const CACHE = 'mandarin-journal-v9';
 const BASE = '/mandarin-journal';
 
 const SHELL = [
@@ -16,6 +16,10 @@ const SHELL = [
   BASE + '/js/tts.js',
   BASE + '/js/search.js',
   BASE + '/js/journal.js',
+  BASE + '/js/english.js',
+  BASE + '/js/english-form.js',
+  BASE + '/js/english-detail.js',
+  BASE + '/data/wordlist.json',
   BASE + '/js/form.js',
   BASE + '/js/detail.js',
   BASE + '/js/flashcard.js',
