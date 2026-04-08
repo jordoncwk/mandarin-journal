@@ -1,5 +1,6 @@
 import { saveEnglishEntry, getEnglishEntry, addToEnglishSyncQueue } from './db.js';
 import { navigate } from './router.js';
+import { flushEnglishQueue } from './sync.js';
 
 function generateId() {
   return (crypto.randomUUID
@@ -86,6 +87,7 @@ export async function renderEnglishForm(container, params) {
     };
     await saveEnglishEntry(entry);
     await addToEnglishSyncQueue(entry);
+    flushEnglishQueue();
     navigate('#english');
   });
 }

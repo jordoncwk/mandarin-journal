@@ -17,7 +17,7 @@ export async function initSync() {
   }
 }
 
-async function flushQueue() {
+export async function flushQueue() {
   if (!GAS_URL || !navigator.onLine) return;
   const queue = await getSyncQueue();
   for (const entry of queue) {
@@ -59,7 +59,7 @@ async function pullFromSheets() {
   }
 }
 
-async function flushEnglishQueue() {
+export async function flushEnglishQueue() {
   if (!GAS_URL || !navigator.onLine) return;
   const queue = await getEnglishSyncQueue();
   for (const entry of queue) {

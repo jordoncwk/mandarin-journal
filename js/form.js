@@ -1,5 +1,6 @@
 import { saveEntry, getEntry, addToSyncQueue } from './db.js';
 import { navigate } from './router.js';
+import { flushQueue } from './sync.js';
 import { convertPinyin } from './pinyin.js';
 import { decompose } from './hanzi.js';
 
@@ -146,6 +147,7 @@ export async function renderForm(container, params) {
     };
     await saveEntry(entry);
     await addToSyncQueue(entry);
+    flushQueue();
     navigate('#journal');
   });
 }
