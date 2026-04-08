@@ -97,10 +97,14 @@ export async function renderJournal(container) {
     const header = document.querySelector('.journal-header');
     if (!header) return;
     header.innerHTML = `
-      <h1>Mandarin Journal</h1>
+      <div class="journal-tabs">
+        <button class="tab-btn active" id="tab-mandarin">Mandarin</button>
+        <button class="tab-btn" id="tab-english">English</button>
+      </div>
       <button class="icon-btn" id="flashcard-btn">📚</button>
     `;
     document.getElementById('flashcard-btn').addEventListener('click', () => navigate('#flashcard'));
+    document.getElementById('tab-english').addEventListener('click', () => navigate('#english'));
   }
 
   function renderSelectHeader() {
@@ -118,7 +122,10 @@ export async function renderJournal(container) {
     container.innerHTML = `
       <div class="journal">
         <header class="journal-header">
-          <h1>Mandarin Journal</h1>
+          <div class="journal-tabs">
+            <button class="tab-btn active" id="tab-mandarin">Mandarin</button>
+            <button class="tab-btn" id="tab-english">English</button>
+          </div>
           <button class="icon-btn" id="flashcard-btn">📚</button>
         </header>
         <div class="search-bar">
@@ -161,6 +168,7 @@ export async function renderJournal(container) {
     );
     document.getElementById('add-btn').addEventListener('click', () => navigate('#add'));
     document.getElementById('flashcard-btn').addEventListener('click', () => navigate('#flashcard'));
+    document.getElementById('tab-english').addEventListener('click', () => navigate('#english'));
 
     document.querySelector('.entry-list').addEventListener('touchstart', e => {
       if (!e.target.closest('.swipe-delete-btn')) {
