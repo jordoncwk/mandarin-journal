@@ -1,4 +1,4 @@
-const CACHE = 'mandarin-journal-v1';
+const CACHE = 'mandarin-journal-v2';
 const BASE = '/mandarin-journal';
 
 const SHELL = [
