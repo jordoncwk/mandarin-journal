@@ -195,6 +195,7 @@ body {
   position: fixed;
   bottom: calc(24px + env(safe-area-inset-bottom));
   right: 24px;
+  z-index: 50;
   width: 54px;
   height: 54px;
   border-radius: 50%;
