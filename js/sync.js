@@ -36,12 +36,15 @@ async function pullFromSheets() {
     if (!ok || !remote) return;
     const local = await listEntries();
     const localMap = Object.fromEntries(local.map(e => [e.id, e]));
+    let changed = false;
     for (const entry of remote) {
       const localEntry = localMap[entry.id];
       if (!localEntry || entry.updatedAt > localEntry.updatedAt) {
         await saveEntry(entry);
+        changed = true;
       }
     }
+    if (changed) window.dispatchEvent(new CustomEvent('sync-complete'));
   } catch (_) {
     // silent — try again on next launch
   }

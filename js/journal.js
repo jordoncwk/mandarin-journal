@@ -64,6 +64,13 @@ export async function renderJournal(container) {
   }
 
   render();
+
+  const onSyncComplete = async () => {
+    if (!container.isConnected) return;
+    entries = await listEntries();
+    render();
+  };
+  window.addEventListener('sync-complete', onSyncComplete, { once: true });
 }
 
 function escHtml(str) {
