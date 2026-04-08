@@ -1,5 +1,6 @@
 import { listEntries, deleteEntry, queueDeletion } from './db.js';
 import { navigate } from './router.js';
+import { flushQueue } from './sync.js';
 import { searchEntries } from './search.js';
 
 export async function renderJournal(container) {
@@ -20,6 +21,7 @@ export async function renderJournal(container) {
   async function deleteEntryAndSync(id) {
     await deleteEntry(id);
     await queueDeletion(id);
+    flushQueue();
     entries = entries.filter(e => e.id !== id);
     render();
   }
@@ -206,6 +208,7 @@ export async function renderJournal(container) {
         await deleteEntry(id);
         await queueDeletion(id);
       }
+      flushQueue();
       entries = entries.filter(e => !ids.includes(e.id));
       render();
     });

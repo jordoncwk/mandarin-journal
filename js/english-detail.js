@@ -1,5 +1,6 @@
 import { getEnglishEntry, deleteEnglishEntry, queueEnglishDeletion } from './db.js';
 import { navigate } from './router.js';
+import { flushEnglishQueue } from './sync.js';
 
 function escHtml(str) {
   return String(str ?? '')
@@ -37,6 +38,7 @@ export async function renderEnglishDetail(container, params) {
   document.getElementById('delete').addEventListener('click', async () => {
     await deleteEnglishEntry(id);
     await queueEnglishDeletion(id);
+    flushEnglishQueue();
     navigate('#english');
   });
 }
