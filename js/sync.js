@@ -1,13 +1,19 @@
 import { GAS_URL } from './config.js';
-import { getSyncQueue, removeFromSyncQueue, saveEntry, listEntries } from './db.js';
+import {
+  getSyncQueue, removeFromSyncQueue, saveEntry, listEntries,
+  getEnglishSyncQueue, removeFromEnglishSyncQueue, saveEnglishEntry, listEnglishEntries,
+} from './db.js';
 
 export async function initSync() {
   window.addEventListener('online', () => {
     pullFromSheets().then(flushQueue);
+    pullEnglishFromSheets().then(flushEnglishQueue);
   });
   if (navigator.onLine && GAS_URL) {
     await pullFromSheets();
     await flushQueue();
+    await pullEnglishFromSheets();
+    await flushEnglishQueue();
   }
 }
 
@@ -48,6 +54,48 @@ async function pullFromSheets() {
       }
     }
     if (changed) window.dispatchEvent(new CustomEvent('sync-complete'));
+  } catch (_) {
+    // silent — try again on next launch
+  }
+}
+
+async function flushEnglishQueue() {
+  if (!GAS_URL || !navigator.onLine) return;
+  const queue = await getEnglishSyncQueue();
+  for (const entry of queue) {
+    try {
+      const action = entry._deleted ? 'deleteEnglishEntry' : 'upsertEnglishEntry';
+      const resp = await fetch(GAS_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ action, entry }),
+      });
+      const result = await resp.json();
+      if (result.ok) await removeFromEnglishSyncQueue(entry.id);
+    } catch (_) {
+      break;
+    }
+  }
+}
+
+async function pullEnglishFromSheets() {
+  if (!GAS_URL || !navigator.onLine) return;
+  try {
+    const resp = await fetch(`${GAS_URL}?action=getAllEnglish`);
+    const { ok, entries: remote } = await resp.json();
+    if (!ok || !remote) return;
+    const local = await listEnglishEntries();
+    const localMap = Object.fromEntries(local.map(e => [e.id, e]));
+    let changed = false;
+    for (const entry of remote) {
+      if (entry._deleted) continue;
+      const localEntry = localMap[entry.id];
+      if (!localEntry || entry.updatedAt > localEntry.updatedAt) {
+        await saveEnglishEntry(entry);
+        changed = true;
+      }
+    }
+    if (changed) window.dispatchEvent(new CustomEvent('english-sync-complete'));
   } catch (_) {
     // silent — try again on next launch
   }
