@@ -31,8 +31,8 @@ export async function renderJournal(container) {
     let startX = 0, currentX = 0, swiping = false;
     let longPressTimer = null;
 
-    card.addEventListener('touchstart', e => {
-      startX = e.touches[0].clientX;
+    function onStart(x) {
+      startX = x;
       swiping = false;
       if (!selectMode) {
         longPressTimer = setTimeout(() => {
@@ -40,19 +40,19 @@ export async function renderJournal(container) {
           enterSelectMode(id);
         }, 500);
       }
-    }, { passive: true });
+    }
 
-    card.addEventListener('touchmove', e => {
+    function onMove(x) {
       if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
-      const dx = e.touches[0].clientX - startX;
+      const dx = x - startX;
       if (!swiping && Math.abs(dx) > 10) swiping = true;
       if (!swiping) return;
       currentX = Math.min(0, Math.max(-80, dx));
       card.style.transition = 'none';
       card.style.transform = `translateX(${currentX}px)`;
-    }, { passive: true });
+    }
 
-    card.addEventListener('touchend', () => {
+    function onEnd() {
       if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
       if (!swiping) return;
       card.style.transition = 'transform 0.2s ease';
@@ -62,6 +62,22 @@ export async function renderJournal(container) {
         card.style.transform = 'translateX(0)';
       }
       swiping = false;
+    }
+
+    card.addEventListener('touchstart', e => onStart(e.touches[0].clientX), { passive: true });
+    card.addEventListener('touchmove', e => onMove(e.touches[0].clientX), { passive: true });
+    card.addEventListener('touchend', onEnd);
+
+    card.addEventListener('mousedown', e => {
+      onStart(e.clientX);
+      const onMouseMove = e => onMove(e.clientX);
+      const onMouseUp = () => {
+        onEnd();
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+      };
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
     });
 
     wrapper.querySelector('.swipe-delete-btn').addEventListener('click', () => {

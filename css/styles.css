@@ -150,7 +150,8 @@ body {
   border-radius: 12px;
   margin-bottom: 10px;
 }
-.card-swipe-wrapper .entry-card {
+.card-swipe-wrapper .entry-card,
+.card-swipe-wrapper .english-card {
   margin-bottom: 0;
   border-radius: 12px;
   position: relative;
@@ -175,7 +176,8 @@ body {
 }
 
 /* ── Multi-select ── */
-.card-swipe-wrapper.selected .entry-card {
+.card-swipe-wrapper.selected .entry-card,
+.card-swipe-wrapper.selected .english-card {
   outline: 2px solid var(--accent);
 }
 .card-checkbox {
