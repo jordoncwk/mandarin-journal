@@ -82,8 +82,9 @@ body {
 }
 .english-card:active { background: var(--surface2); }
 .english-card-body {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: var(--text);
+  line-height: 1.5;
   margin-bottom: 6px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -92,14 +93,15 @@ body {
 }
 .english-card-meta {
   display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
   align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
 }
 .word-badge {
   background: var(--surface2);
-  color: var(--text-muted);
-  border-radius: 10px;
+  color: var(--accent);
+  border-radius: 8px;
   padding: 2px 8px;
   font-size: 0.75rem;
 }
