@@ -1,6 +1,5 @@
-import { getEnglishEntry, deleteEnglishEntry, queueEnglishDeletion } from './db.js';
+import { getEnglishEntry } from './db.js';
 import { navigate } from './router.js';
-import { flushEnglishQueue } from './sync.js';
 
 function escHtml(str) {
   return String(str ?? '')
@@ -28,17 +27,10 @@ export async function renderEnglishDetail(container, params) {
         <div class="detail-meta" style="margin-top:16px">
           <span class="date">${new Date(entry.createdAt).toLocaleDateString()}</span>
         </div>
-        <button class="delete-btn" id="delete" style="margin-top:24px;background:var(--danger);color:#fff;border:none;border-radius:12px;padding:12px 24px;font-size:1rem;cursor:pointer;width:100%">Delete Entry</button>
       </div>
     </div>
   `;
 
   document.getElementById('back').addEventListener('click', () => history.back());
   document.getElementById('edit').addEventListener('click', () => navigate(`#english-edit?id=${id}`));
-  document.getElementById('delete').addEventListener('click', async () => {
-    await deleteEnglishEntry(id);
-    await queueEnglishDeletion(id);
-    flushEnglishQueue();
-    navigate('#english');
-  });
 }
