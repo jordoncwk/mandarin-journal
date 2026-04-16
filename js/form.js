@@ -133,21 +133,28 @@ export async function renderForm(container, params) {
   document.getElementById('save').addEventListener('click', async () => {
     const characters = document.getElementById('characters').value.trim();
     if (!characters) { alert('Characters are required.'); return; }
-    const pinyin = document.getElementById('pinyin').value.trim();
-    const english = document.getElementById('english').value.trim();
-    const notes = document.getElementById('notes').value.trim();
-    const now = new Date().toISOString();
-    const radicals = await decompose(characters);
-    const entry = {
-      id: editId || generateId(),
-      characters, pinyin, english, notes,
-      tags: currentTags, radicals,
-      createdAt: existing ? existing.createdAt : now,
-      updatedAt: now,
-    };
-    await saveEntry(entry);
-    await addToSyncQueue(entry);
-    flushQueue();
-    navigate('#journal');
+    const saveBtn = document.getElementById('save');
+    saveBtn.disabled = true;
+    try {
+      const pinyin = document.getElementById('pinyin').value.trim();
+      const english = document.getElementById('english').value.trim();
+      const notes = document.getElementById('notes').value.trim();
+      const now = new Date().toISOString();
+      const radicals = await decompose(characters);
+      const entry = {
+        id: editId || generateId(),
+        characters, pinyin, english, notes,
+        tags: currentTags, radicals,
+        createdAt: existing ? existing.createdAt : now,
+        updatedAt: now,
+      };
+      await saveEntry(entry);
+      await addToSyncQueue(entry);
+      flushQueue();
+      navigate('#journal');
+    } catch (err) {
+      saveBtn.disabled = false;
+      throw err;
+    }
   });
 }

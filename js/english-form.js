@@ -77,17 +77,24 @@ export async function renderEnglishForm(container, params) {
   document.getElementById('save').addEventListener('click', async () => {
     const body = document.getElementById('body').value.trim();
     if (!body) { alert('Entry cannot be empty.'); return; }
-    const now = new Date().toISOString();
-    const entry = {
-      id: editId || generateId(),
-      body,
-      wordUsed: currentWord ? currentWord.word : '',
-      createdAt: existing ? existing.createdAt : now,
-      updatedAt: now,
-    };
-    await saveEnglishEntry(entry);
-    await addToEnglishSyncQueue(entry);
-    flushEnglishQueue();
-    navigate('#english');
+    const saveBtn = document.getElementById('save');
+    saveBtn.disabled = true;
+    try {
+      const now = new Date().toISOString();
+      const entry = {
+        id: editId || generateId(),
+        body,
+        wordUsed: currentWord ? currentWord.word : '',
+        createdAt: existing ? existing.createdAt : now,
+        updatedAt: now,
+      };
+      await saveEnglishEntry(entry);
+      await addToEnglishSyncQueue(entry);
+      flushEnglishQueue();
+      navigate('#english');
+    } catch (err) {
+      saveBtn.disabled = false;
+      throw err;
+    }
   });
 }
